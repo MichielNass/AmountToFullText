@@ -325,132 +325,132 @@ module internal Amount =
                 | (a,b) -> (a,b) |> amountType.StringForNumberOfTensWithinLargerNumber |> addTextCents
     
             member amountType.ToFullText () =
-    
-                let add stringInput stringSource =
-                    match stringInput with
-                    | "" -> stringSource
-                    | s -> stringSource + " " + s
-    
-                let addCurrency = add amountType.CurrencyDescription
-                let addCents = add amountType.Cents
-    
-                match amountType with
-                | Ones (_, currency, numberA, decimals) -> 
-                
-                    match numberA, amountType.Decimals with
-                    | Number.Zero, Decimals (Number.Zero,Number.Zero) ->
-                        let isZero = (Jargon.WordForZero amountType.Language).Word
-    
-                        isZero
-                        |> addCurrency
-    
-                    | Number.Zero, _ ->
-                        amountType.Cents
-    
-                    | _,_ ->
-    
-                        let partOnes = (Jargon.WordForSingles (amountType.Language,numberA)).Word
-                        
-    
-                        partOnes
-                        |> addCurrency
-                        |> addCents
-    
-                | Tens (_, currency, realNumber, numberB, decimals) ->
-                
-                    let partTens =
-                        (Number.Real realNumber, numberB)
-                        |> amountType.StringForNumberOfTensWithinLargerNumber
-    
-                    partTens
-                    |> addCurrency
-                    |> addCents
-    
-                | Hundreds (_, currency, realNumber, numberB, numberC, decimals) ->
-    
-                    let partHundreds =
-                        (Number.Real realNumber, numberB, numberC)
-                        |> amountType.StringForNumberOfHundredsWithinLargerNumber
-    
-                    partHundreds
-                    |> addCurrency
-                    |> addCents
-    
-                | Thousands (_, currency, realNumber, numberB, numberC, numberD, decimals) -> 
-                    let stringThousands = (Jargon.WordForThousand amountType.Language).Word
-    
-                    let partThousands =
-                        let stringNumber =
-                            match amountType.Language with
-                            | Dutch ->
-                                match realNumber with
-                                | RealNumber.One -> ""
-                                | _ -> (Jargon.WordForSingles (amountType.Language,(Number.Real realNumber))).Word
             
-                        $"%s{stringNumber}%s{stringThousands}"
+                    let add stringInput stringSource =
+                        match stringInput with
+                        | "" -> stringSource
+                        | s -> stringSource + " " + s
             
-                    let partHundreds =
-                        (numberB, numberC, numberD)
-                        |> amountType.StringForNumberOfHundredsWithinLargerNumber
-    
-                    partThousands
-                    |> add partHundreds
-                    |> addCurrency
-                    |> addCents
+                    let addCurrency = add amountType.CurrencyDescription
+                    let addCents = add amountType.Cents
+            
+                    match amountType with
+                    | Ones (_, currency, numberA, decimals) -> 
                         
-                | TenThousands (_, currency, realNumber, numberB, numberC, numberD, numberE, decimals) -> 
-                    let stringThousands = (Jargon.WordForThousand amountType.Language).Word
-    
-                    let partTenThousands =
-                        let stringNumber =
+                        match numberA, amountType.Decimals with
+                        | Number.Zero, Decimals (Number.Zero,Number.Zero) ->
+                            let isZero = (Jargon.WordForZero amountType.Language).Word
+            
+                            isZero
+                            |> addCurrency
+            
+                        | Number.Zero, _ ->
+                            amountType.Cents
+            
+                        | _,_ ->
+            
+                            let partOnes = (Jargon.WordForSingles (amountType.Language,numberA)).Word
+                                
+            
+                            partOnes
+                            |> addCurrency
+                            |> addCents
+            
+                    | Tens (_, currency, realNumber, numberB, decimals) ->
+                        
+                        let partTens =
                             (Number.Real realNumber, numberB)
                             |> amountType.StringForNumberOfTensWithinLargerNumber
-                        $"%s{stringNumber}%s{stringThousands}"
-    
-                    let partHundreds =
-                        (numberC, numberD, numberE)
-                        |> amountType.StringForNumberOfHundredsWithinLargerNumber
-    
-                    partTenThousands
-                    |> add partHundreds
-                    |> addCurrency
-                    |> addCents
-    
-                | HundredThousands (_, currency, realNumber, numberB, numberC, numberD, numberE, numberF, decimals) ->
             
-                    let partThousands =
-                        (Number.Real realNumber, numberB, numberC)
-                        |> amountType.StringForNumberOfThousandsWithinLargerNumber
-                     
-                    let partHundreds =
-                        (numberD, numberE, numberF)
-                        |> amountType.StringForNumberOfHundredsWithinLargerNumber
-    
-                    partThousands
-                    |> add partHundreds
-                    |> addCurrency
-                    |> addCents
-    
-                | Millions (_, currency, realNumber, numberB, numberC, numberD, numberE, numberF, numberG, decimals) -> 
+                        partTens
+                        |> addCurrency
+                        |> addCents
             
-                    let partMillions = 
-                        realNumber
-                        |> Number.Real
-                        |> amountType.StringForNumberOfMillions
+                    | Hundreds (_, currency, realNumber, numberB, numberC, decimals) ->
             
-                    let partThousands =
-                        (numberB, numberC, numberD)
-                        |> amountType.StringForNumberOfThousandsWithinLargerNumber
-    
-                    let partHundreds =
-                        (numberE, numberF, numberG)
-                        |> amountType.StringForNumberOfHundredsWithinLargerNumber
-    
-                    partMillions
-                    |> add partThousands
-                    |> add partHundreds
-                    |> addCurrency
-                    |> addCents
+                        let partHundreds =
+                            (Number.Real realNumber, numberB, numberC)
+                            |> amountType.StringForNumberOfHundredsWithinLargerNumber
+            
+                        partHundreds
+                        |> addCurrency
+                        |> addCents
+            
+                    | Thousands (_, currency, realNumber, numberB, numberC, numberD, decimals) -> 
+                        let stringThousands = (Jargon.WordForThousand amountType.Language).Word
+            
+                        let partThousands =
+                            let stringNumber =
+                                match amountType.Language with
+                                | Dutch ->
+                                    match realNumber with
+                                    | RealNumber.One -> ""
+                                    | _ -> (Jargon.WordForSingles (amountType.Language,(Number.Real realNumber))).Word
+                    
+                            $"%s{stringNumber}%s{stringThousands}"
+                    
+                        let partHundreds =
+                            (numberB, numberC, numberD)
+                            |> amountType.StringForNumberOfHundredsWithinLargerNumber
+            
+                        partThousands
+                        |> add partHundreds
+                        |> addCurrency
+                        |> addCents
+                                
+                    | TenThousands (_, currency, realNumber, numberB, numberC, numberD, numberE, decimals) -> 
+                        let stringThousands = (Jargon.WordForThousand amountType.Language).Word
+            
+                        let partTenThousands =
+                            let stringNumber =
+                                (Number.Real realNumber, numberB)
+                                |> amountType.StringForNumberOfTensWithinLargerNumber
+                            $"%s{stringNumber}%s{stringThousands}"
+            
+                        let partHundreds =
+                            (numberC, numberD, numberE)
+                            |> amountType.StringForNumberOfHundredsWithinLargerNumber
+            
+                        partTenThousands
+                        |> add partHundreds
+                        |> addCurrency
+                        |> addCents
+            
+                    | HundredThousands (_, currency, realNumber, numberB, numberC, numberD, numberE, numberF, decimals) ->
+                    
+                        let partThousands =
+                            (Number.Real realNumber, numberB, numberC)
+                            |> amountType.StringForNumberOfThousandsWithinLargerNumber
+                             
+                        let partHundreds =
+                            (numberD, numberE, numberF)
+                            |> amountType.StringForNumberOfHundredsWithinLargerNumber
+            
+                        partThousands
+                        |> add partHundreds
+                        |> addCurrency
+                        |> addCents
+            
+                    | Millions (_, currency, realNumber, numberB, numberC, numberD, numberE, numberF, numberG, decimals) -> 
+                    
+                        let partMillions = 
+                            realNumber
+                            |> Number.Real
+                            |> amountType.StringForNumberOfMillions
+                    
+                        let partThousands =
+                            (numberB, numberC, numberD)
+                            |> amountType.StringForNumberOfThousandsWithinLargerNumber
+            
+                        let partHundreds =
+                            (numberE, numberF, numberG)
+                            |> amountType.StringForNumberOfHundredsWithinLargerNumber
+            
+                        partMillions
+                        |> add partThousands
+                        |> add partHundreds
+                        |> addCurrency
+                        |> addCents
     
         module AmountType =
     
